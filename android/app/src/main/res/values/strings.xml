@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LucraJa</string>
+    <string name="title_activity_main">LucraJa</string>
+    <string name="package_name">com.lucraja.app</string>
+    <string name="custom_url_scheme">com.lucraja.app</string>
+</resources>
