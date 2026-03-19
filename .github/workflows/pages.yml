@@ -27,7 +27,9 @@ jobs:
           cache: "npm"
       - name: Install dependencies
         run: npm ci
-      - name: Build static site
+      - name: Build static site (with basePath for GitHub Pages)
+        env:
+          NEXT_PUBLIC_BASE_PATH: "/LucraJa"
         run: npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
