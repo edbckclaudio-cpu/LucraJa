@@ -22,6 +22,7 @@ export default function Page() {
   const [defaultOffering, setDefaultOffering] = useState<any>(null);
   const [credito10Package, setCredito10Package] = useState<any>(null);
   const [results, setResults] = useState<Resultado[] | null>(null);
+  const [lastOpts, setLastOpts] = useState<CalcOptions | null>(null);
 
   useEffect(() => {
     // 1. Verificar sessão atual
@@ -139,6 +140,7 @@ export default function Page() {
     try {
       const r = calcularTodos(opts);
       setResults(r);
+      setLastOpts(opts);
       const ok = await consumeCredit();
       return ok;
     } catch {
@@ -212,7 +214,7 @@ export default function Page() {
       </div>
 
       <CalculatorForm balance={balance} onSubmit={handleCalculate} />
-      <ResultsCarousel results={results} />
+      <ResultsCarousel results={results} opts={lastOpts} />
     </main>
   );
 }
