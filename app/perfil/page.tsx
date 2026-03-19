@@ -17,8 +17,8 @@ export default function PerfilPage() {
   const [pack, setPack] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
+    supabase.auth.getSession().then((res: any) => {
+      setSession(res?.data?.session ?? null);
     });
   }, []);
 

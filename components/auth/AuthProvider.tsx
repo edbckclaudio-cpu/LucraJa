@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data } = await supabase.auth.getSession();
       const currentEmail = data.session?.user.email ?? null;
       setEmail(currentEmail);
-      const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      const { data: sub } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
         setEmail(session?.user.email ?? null);
       });
       unsub = sub.subscription.unsubscribe;
