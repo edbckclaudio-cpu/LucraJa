@@ -7,8 +7,8 @@ android {
         applicationId "com.lucraja.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "5.0"
+        versionCode 8
+        versionName "8.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -21,10 +21,16 @@ android {
     if (keystorePropertiesFile.exists()) {
         keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
     }
+    // Fallback via project properties: -PstoreFile=... -PstorePassword=... -PkeyAlias=... -PkeyPassword=...
+    def propStoreFile = project.hasProperty("storeFile") ? project.property("storeFile") : null
+    def propStorePassword = project.hasProperty("storePassword") ? project.property("storePassword") : null
+    def propKeyAlias = project.hasProperty("keyAlias") ? project.property("keyAlias") : null
+    def propKeyPassword = project.hasProperty("keyPassword") ? project.property("keyPassword") : null
     def envStoreFile = System.getenv("STORE_FILE")
     def envStorePassword = System.getenv("STORE_PASSWORD")
     def envKeyAlias = System.getenv("KEY_ALIAS")
     def envKeyPassword = System.getenv("KEY_PASSWORD")
+    def useDebugForRelease = System.getenv("USE_DEBUG_SIGNING") == "1" || project.hasProperty("useDebugSigning")
     signingConfigs {
         release {
             if (keystorePropertiesFile.exists()) {
@@ -32,6 +38,11 @@ android {
                 storePassword keystoreProperties['storePassword']
                 keyAlias keystoreProperties['keyAlias']
                 keyPassword keystoreProperties['keyPassword']
+            } else if (propStoreFile && propStorePassword && propKeyAlias && propKeyPassword) {
+                storeFile file(propStoreFile)
+                storePassword propStorePassword
+                keyAlias propKeyAlias
+                keyPassword propKeyPassword
             } else if (envStoreFile && envStorePassword && envKeyAlias && envKeyPassword) {
                 storeFile file(envStoreFile)
                 storePassword envStorePassword
@@ -44,8 +55,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            if (keystorePropertiesFile.exists()) {
+            if (keystorePropertiesFile.exists()
+                || (propStoreFile && propStorePassword && propKeyAlias && propKeyPassword)
+                || (envStoreFile && envStorePassword && envKeyAlias && envKeyPassword)) {
                 signingConfig signingConfigs.release
+            } else if (useDebugForRelease) {
+                signingConfig signingConfigs.debug
             }
         }
     }

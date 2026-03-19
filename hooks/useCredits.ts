@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabaseClient";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { tsInfo, tsError } from "@/lib/troubleshoot";
+import { FLAGS, creditsCacheKey } from "@/lib/featureFlags";
 
 export function useCredits(emailParam?: string | null) {
   const { email: ctxEmail } = useAuth();
@@ -13,23 +15,58 @@ export function useCredits(emailParam?: string | null) {
     if (!email || !supabase) return;
     setLoading(true);
     try {
+      // Carrega cache local como fallback inicial
+      if (FLAGS.creditsLocalCache && typeof window !== "undefined") {
+        const cached = window.localStorage.getItem(creditsCacheKey(email));
+        if (cached !== null) {
+          const n = Number(cached) || 0;
+          setBalance(n);
+        }
+      }
+      tsInfo("useCredits", "select_start", { email });
       const { data, error } = await supabase
         .from("user_credits")
         .select("credits")
         .eq("email", email)
         .single();
 
-      if (error && error.code !== "PGRST116") {
-        setBalance(0);
-      } else if (!data) {
-        const { data: inserted } = await supabase
-          .from("user_credits")
-          .insert({ email, credits: 2 })
-          .select("credits")
-          .single();
-        setBalance(inserted?.credits ?? 2);
-      } else {
-        setBalance(data.credits ?? 0);
+      if (!error && data) {
+        tsInfo("useCredits", "select_ok", { credits: data.credits });
+        const next = data.credits ?? 0;
+        setBalance(next);
+        if (FLAGS.creditsLocalCache && typeof window !== "undefined") {
+          window.localStorage.setItem(creditsCacheKey(email), String(next));
+        }
+        return;
+      }
+
+      tsError("useCredits", "select_failed", { error });
+      const insertedTry = await supabase
+        .from("user_credits")
+        .insert({ email, credits: 2 })
+        .select("credits")
+        .single();
+      if (!insertedTry.error && insertedTry.data) {
+        tsInfo("useCredits", "insert_ok", { credits: insertedTry.data.credits });
+        const next = insertedTry.data.credits ?? 2;
+        setBalance(next);
+        if (FLAGS.creditsLocalCache && typeof window !== "undefined") {
+          window.localStorage.setItem(creditsCacheKey(email), String(next));
+        }
+        return;
+      }
+
+      tsError("useCredits", "insert_failed", { error: insertedTry.error });
+      const { data: again } = await supabase
+        .from("user_credits")
+        .select("credits")
+        .eq("email", email)
+        .single();
+      tsInfo("useCredits", "reselect_after_insert", { credits: again?.credits });
+      const next = again?.credits ?? balance;
+      setBalance(next);
+      if (FLAGS.creditsLocalCache && typeof window !== "undefined") {
+        window.localStorage.setItem(creditsCacheKey(email), String(next));
       }
     } finally {
       setLoading(false);
@@ -40,12 +77,18 @@ export function useCredits(emailParam?: string | null) {
     if (!email || !supabase) return;
     setLoading(true);
     try {
+      tsInfo("useCredits", "refresh_start", { email });
       const { data } = await supabase
         .from("user_credits")
         .select("credits")
         .eq("email", email)
         .single();
-      setBalance(data?.credits ?? 0);
+      tsInfo("useCredits", "refresh_ok", { credits: data?.credits });
+      const next = data?.credits ?? 0;
+      setBalance(next);
+      if (FLAGS.creditsLocalCache && typeof window !== "undefined") {
+        window.localStorage.setItem(creditsCacheKey(email), String(next));
+      }
     } finally {
       setLoading(false);
     }
@@ -57,13 +100,22 @@ export function useCredits(emailParam?: string | null) {
     setLoading(true);
     try {
       const next = Math.max(0, balance - 1);
+      tsInfo("useCredits", "consume_start", { current: balance, next });
       const { data, error } = await supabase
         .from("user_credits")
         .upsert({ email, credits: next }, { onConflict: "email" })
         .select("credits")
         .single();
-      if (error) return false;
-      setBalance(data?.credits ?? next);
+      if (error) {
+        tsError("useCredits", "consume_failed", { error });
+        return false;
+      }
+      tsInfo("useCredits", "consume_ok", { credits: data?.credits });
+      const final = data?.credits ?? next;
+      setBalance(final);
+      if (FLAGS.creditsLocalCache && typeof window !== "undefined") {
+        window.localStorage.setItem(creditsCacheKey(email), String(final));
+      }
       return true;
     } finally {
       setLoading(false);

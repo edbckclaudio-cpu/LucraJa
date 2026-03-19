@@ -1,8 +1,5 @@
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "./supabase";
 
 export function getSupabaseClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anon) return null;
-  return createClient(url, anon);
+  return supabase;
 }
