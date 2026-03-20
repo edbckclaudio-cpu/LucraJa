@@ -122,6 +122,8 @@
   }
   body {
     @apply bg-background text-foreground;
+    padding-top: max(env(safe-area-inset-top, 0px), 12px);
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 12px);
   }
   html {
     @apply font-sans;

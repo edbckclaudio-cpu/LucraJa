@@ -32,6 +32,20 @@ export function useCredits(emailParam?: string | null) {
 
       if (!error && data) {
         tsInfo("useCredits", "select_ok", { credits: data.credits });
+        // Se o registro existe mas a coluna 'credits' está nula/indefinida, inicializa com 2
+        if (data.credits === null || typeof data.credits === "undefined") {
+          const init = await supabase
+            .from("user_credits")
+            .upsert({ email, credits: 2 }, { onConflict: "email" })
+            .select("credits")
+            .single();
+          const initial = init.data?.credits ?? 2;
+          setBalance(initial);
+          if (FLAGS.creditsLocalCache && typeof window !== "undefined") {
+            window.localStorage.setItem(creditsCacheKey(email), String(initial));
+          }
+          return;
+        }
         const next = data.credits ?? 0;
         setBalance(next);
         if (FLAGS.creditsLocalCache && typeof window !== "undefined") {
@@ -130,6 +144,36 @@ export function useCredits(emailParam?: string | null) {
     }
   }, [email, ensureRecord]);
 
+  const updateCredits = useCallback(
+    async (delta: number) => {
+      if (!email || !supabase) return 0;
+      setLoading(true);
+      try {
+        const next = Math.max(0, (balance ?? 0) + (delta ?? 0));
+        tsInfo("useCredits", "update_start", { current: balance, delta, next });
+        const { data, error } = await supabase
+          .from("user_credits")
+          .upsert({ email, credits: next }, { onConflict: "email" })
+          .select("credits")
+          .single();
+        if (error) {
+          tsError("useCredits", "update_failed", { error });
+          return balance ?? 0;
+        }
+        const final = data?.credits ?? next;
+        setBalance(final);
+        if (FLAGS.creditsLocalCache && typeof window !== "undefined") {
+          window.localStorage.setItem(creditsCacheKey(email), String(final));
+        }
+        tsInfo("useCredits", "update_ok", { credits: final });
+        return final;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [email, supabase, balance]
+  );
+
   const syncBalance = refresh;
-  return { balance, loading, refresh, consumeCredit, syncBalance };
+  return { balance, loading, refresh, consumeCredit, syncBalance, updateCredits };
 }
