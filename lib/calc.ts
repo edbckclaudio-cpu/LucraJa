@@ -82,7 +82,7 @@ export function calcularParaMarketplace(
   const voceRecebe = precoVenda - taxasTotais;
   const custoTotal = custoPago + (freteVendedor ? 25 : 0);
   const lucroReal = voceRecebe - custoTotal;
-  const margem = precoVenda > 0 ? (lucroReal / precoVenda) * 100 : 0;
+  const margem = custoPago > 0 ? (lucroReal / custoPago) * 100 : 0;
   return {
     marketplace: m,
     impostoMEI,

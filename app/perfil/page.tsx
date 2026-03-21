@@ -322,10 +322,10 @@ export default function PerfilPage() {
   };
 
   return (
-    <main className="container mx-auto max-w-2xl p-4 space-y-6">
-      <header className="flex items-center justify-between">
+    <main className="container mx-auto max-w-3xl p-6 space-y-8">
+      <header className="flex items-center justify-between border-b border-primary/10 pb-4">
         <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold">Perfil</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">Perfil</h1>
           <button onClick={handlePin} aria-label="debug pin" className="rounded p-1 text-gray-400 hover:text-gray-200">
             <Pin className="h-4 w-4" />
           </button>

@@ -121,6 +121,9 @@ function HelpPopover() {
             para posicionar sua oferta de forma competitiva. Valores muito acima da média reduzem
             significativamente a probabilidade de venda. Considere custos, taxas e o preço dos concorrentes
             para definir um valor atrativo com margem sustentável.
+            <br />
+            <br />
+            A margem exibida no LucraJá corresponde a <strong>Lucro real ÷ Custo pago × 100</strong>.
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

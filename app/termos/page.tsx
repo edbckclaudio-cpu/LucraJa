@@ -34,6 +34,13 @@ export default function TermosPage() {
           A decisão final de precificação é de total responsabilidade do vendedor.
         </p>
 
+        <h2 className="text-xl font-bold mt-6">Definição de Margem</h2>
+        <p>
+          Para padronização de entendimento, a <strong>margem</strong> exibida pelo LucraJá é calculada como
+          <strong> Lucro real ÷ Custo pago × 100</strong>. O <em>lucro real</em> considera o valor que você
+          recebe após taxas, imposto (se selecionado) e eventuais custos de frete por conta do vendedor.
+        </p>
+
         <h2 className="text-xl font-bold mt-6">Suporte</h2>
         <p>
           Para dúvidas, contate: <a href="mailto:licitmasa_suporte@proton.me">licitmasa_suporte@proton.me</a>.

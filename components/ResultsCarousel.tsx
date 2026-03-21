@@ -35,7 +35,7 @@ export default function ResultsCarousel({ results, opts }: Props) {
       lines.push(`- Taxas totais: ${fmtBRL(r.taxasTotais)}`);
       lines.push(`- Você recebe: ${fmtBRL(r.voceRecebe)}`);
       lines.push(`- Lucro real: ${fmtBRL(r.lucroReal)}`);
-      lines.push(`- Margem: ${p.format(r.margem)}%`);
+      lines.push(`- Margem sobre custo pago: ${p.format(r.margem)}%`);
     }
     lines.push("");
     lines.push(`Gerado com LucraJá`);
@@ -70,7 +70,7 @@ export default function ResultsCarousel({ results, opts }: Props) {
             <div>Você recebe: {fmtBRL(r.voceRecebe)}</div>
             <div>Lucro real: {fmtBRL(r.lucroReal)}</div>
             <div className="col-span-2 font-semibold">
-              Margem: {p.format(r.margem)}%
+              Margem sobre custo pago: {p.format(r.margem)}%
             </div>
           </CardContent>
         </Card>

@@ -416,11 +416,11 @@ export default function Page() {
 
   // TELA PRINCIPAL DO APP (SÓ ACESSÍVEL SE LOGADO)
   return (
-    <main className="container mx-auto max-w-2xl p-4 space-y-6">
-      <header className="flex justify-between items-center">
+    <main className="container mx-auto max-w-3xl p-6 space-y-8">
+      <header className="flex items-center justify-between border-b border-primary/10 pb-4">
         <div className="flex items-center gap-2">
           <HamburgerMenu />
-          <h1 className="text-2xl font-bold">LucraJá</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">LucraJá</h1>
         </div>
         <div className="text-right">
           <p className="text-xs text-gray-500">{session.user.email}</p>
