@@ -1,41 +1,321 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Guia LucraJá</title>
-  <meta name="description" content="Guia rápido de uso do LucraJá." />
-  <link rel="icon" href="/favicon.ico" />
-  <style>
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;background:#0b0b0c;color:#e7e7ea}
-    .wrap{max-width:720px;margin:0 auto;padding:24px}
-    h1{font-size:28px;margin:0 0 12px}
-    p{line-height:1.6;margin:0 0 12px}
-    a{color:#4fb8ff;text-decoration:none}
-    a:hover{text-decoration:underline}
-    .card{background:#141416;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px;margin-top:16px}
-    .btn{display:inline-block;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:#1a1b1e;color:#e7e7ea}
-    .btn:hover{background:#22242a}
-    .muted{color:#a1a1a8;font-size:14px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Plataformas - LucraJá</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --bg: #f8fafc;
+            --text: #334155;
+            --white: #ffffff;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--white);
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 30px;
+        }
+
+        h1 { color: var(--primary); margin: 0; font-size: 2.8rem; letter-spacing: -1px; }
+        .subtitle { color: #64748b; font-size: 1.2rem; margin-top: 10px; }
+
+        /* Seção CTA - Por que o LucraJá? */
+        .highlight-cta {
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.2);
+            text-align: center;
+        }
+
+        .cta-content h2 { color: #fde047; font-size: 2rem; margin-top: 0; }
+        .cta-content p { font-size: 1.1rem; max-width: 800px; margin: 0 auto 25px; }
+
+        .cta-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-item strong { display: block; margin-bottom: 5px; color: #fde047; }
+
+        /* Botão Google Play Estilizado */
+        .store-badge-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .google-play-btn {
+            display: flex;
+            align-items: center;
+            background-color: #000;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .google-play-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+
+        .google-play-btn svg { width: 32px; height: 32px; margin-right: 15px; }
+
+        .btn-text { display: flex; flex-direction: column; text-align: left; line-height: 1.2; }
+        .btn-text span { font-size: 10px; font-weight: 400; }
+        .btn-text strong { font-size: 18px; font-weight: 600; }
+
+        /* Grid de Plataformas */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--primary);
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-5px); }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        .tag-pf { background: #e0e7ff; color: #4338ca; }
+        .tag-pj { background: #fef3c7; color: #92400e; }
+
+        /* Destaque OLX */
+        .olx-box {
+            background: #fff7ed;
+            border: 2px solid #fdba74;
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+        }
+        .olx-box h2 { color: #9a3412; margin-top: 0; display: flex; align-items: center; }
+        .olx-box h2::before { content: "⚠️"; margin-right: 10px; }
+
+        /* Tabela Comparativa */
+        .table-section h2 { text-align: center; margin-bottom: 30px; color: var(--dark); }
+        .table-container {
+            overflow-x: auto;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        table { width: 100%; border-collapse: collapse; min-width: 850px; }
+        th { background-color: #f1f5f9; color: var(--text); padding: 20px; text-align: left; font-weight: 600; }
+        td { padding: 20px; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
+
+        .rank { font-weight: 800; padding: 4px 10px; border-radius: 6px; }
+        .rank-high { background: #dcfce7; color: #166534; }
+        .rank-low { background: #fee2e2; color: #991b1b; }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 0.9rem; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .highlight-cta { padding: 25px; }
+        }
+    </style>
 </head>
 <body>
-  <main class="wrap">
-    <h1>Guia do LucraJá</h1>
-    <p>Bem-vindo ao guia rápido. Aqui você encontra um resumo de como usar o app para calcular suas margens nos marketplaces.</p>
-    <div class="card">
-      <h2>Como usar</h2>
-      <p>1. Informe o preço de venda e o custo pago.</p>
-      <p>2. Ative as opções Imposto MEI e Frete do vendedor quando aplicarem à sua operação.</p>
-      <p>3. Toque em Calcular Lucro para ver o resultado por marketplace.</p>
-      <p class="muted">Margem é calculada como Lucro real ÷ Custo pago × 100.</p>
+
+<header>
+    <div class="container">
+        <h1>Guia do Vendedor Inteligente</h1>
+        <p class="subtitle">Descubra onde vender e pare de perder dinheiro com taxas escondidas.</p>
     </div>
-    <div class="card">
-      <h2>Acesso ao App</h2>
-      <p><a class="btn" href="/">Abrir o LucraJá</a></p>
-      <p class="muted">Se estiver no GitHub Pages do projeto, o app pode estar em /LucraJa/</p>
-      <p><a href="/LucraJa/">Abrir em /LucraJa/</a></p>
+</header>
+
+<div class="container">
+
+    <section class="highlight-cta">
+        <div class="cta-content">
+            <h2>Não corra o risco de "Pagar para Trabalhar"</h2>
+            <p>Muitos vendedores iniciantes perdem dinheiro porque esquecem de calcular o frete real, a embalagem e até a <strong>gasolina</strong> até o ponto de envio. O LucraJá é seu escudo contra o prejuízo.</p>
+            
+            <div class="cta-features">
+                <div class="feature-item">
+                    <strong>🛑 Chega de Lucro Ilusório</strong>
+                    Saiba exatamente quanto sobra no seu bolso após TODAS as taxas da plataforma.
+                </div>
+                <div class="feature-item">
+                    <strong>⛽ Proteja seu Deslocamento</strong>
+                    Não deixe que o custo do transporte para postar o pacote "coma" sua margem de lucro.
+                </div>
+                <div class="feature-item">
+                    <strong>🚀 Decisão Profissional</strong>
+                    Compare na hora: vale mais a pena vender no Mercado Livre ou na OLX Pay?
+                </div>
+            </div>
+
+            <div class="store-badge-container">
+                <a href="https://play.google.com/store/apps/details?id=br.com.lucraja" target="_blank" class="google-play-btn">
+                    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M325.3 234.3L104.6 13l280.8 161.2-5.5 5.5-54.6 54.6zM47 32.8c-.6 2.1-.9 4.3-.9 6.6v432.1c0 2.3.3 4.5.9 6.6l221.7-221.7L47 32.8zm357.4 154.2L414.3 194c25.2 14.4 42.1 41.3 42.1 72 0 30.7-16.9 57.6-42.1 72l-9.7 5.5-54.6-54.6 54.7-54.9zM104.6 499l220.7-221.3 54.6 54.6L104.6 499z" fill="#fff"/></svg>
+                    <div class="btn-text">
+                        <span>DISPONÍVEL NO</span>
+                        <strong>Google Play</strong>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="grid">
+        <div class="card" style="border-top-color: #2563eb;">
+            <span class="tag tag-pf">PF</span> <span class="tag tag-pj">PJ</span>
+            <h2>Mercado Livre Premium</h2>
+            <p><strong>Vantagem:</strong> Venda relâmpago. O produto aparece para todo o Brasil e oferece parcelamento sem juros.</p>
+            <p><strong>Logística:</strong> Etiqueta pronta. Você posta em agências autorizadas ou pontos de coleta perto de você.</p>
+        </div>
+
+        <div class="card" style="border-top-color: #ee4d2d;">
+            <span class="tag tag-pf">PF</span> <span class="tag tag-pj">PJ</span>
+            <h2>Shopee</h2>
+            <p><strong>Vantagem:</strong> Popularidade imensa. Cupons de frete grátis atraem muitos compradores para itens baratos.</p>
+            <p><strong>Logística:</strong> Simples. Gera etiqueta para postagem nos Correios ou agências parceiras (Pegaki).</p>
+        </div>
+
+        <div class="card" style="border-top-color: #ff9900;">
+            <span class="tag tag-pj">PJ</span>
+            <h2>Amazon</h2>
+            <p><strong>Vantagem:</strong> Credibilidade total. O público da Amazon costuma reclamar menos e comprar itens de maior valor.</p>
+            <p><strong>Logística:</strong> A Amazon pode coletar na sua porta (DBA) ou você envia para o centro deles (FBA).</p>
+        </div>
+
+        <div class="card" style="border-top-color: #f87171;">
+            <span class="tag tag-pf">PF</span>
+            <h2>Enjoei (Turbinado)</h2>
+            <p><strong>Vantagem:</strong> O paraíso do desapego. Ótimo para roupas, acessórios e marcas de luxo usadas.</p>
+            <p><strong>Logística:</strong> Vendedor imprime a etiqueta e leva aos Correios. Taxas mais altas, mas o público aceita pagar o valor pedido.</p>
+        </div>
     </div>
-  </main>
+
+    <div class="olx-box">
+        <h2>OLX: A Escolha Estratégica</h2>
+        <p><strong>OLX Padrão (Taxa Zero):</strong> Use exclusivamente para <strong>produtos grandes e pesados</strong> (fogão, cama, sofá, geladeira). Como o frete desses itens seria absurdo, você combina para o comprador retirar na sua casa e pagar no ato (Pix ou dinheiro). 
+        <br><em>Cuidado:</em> Nunca envie pelos correios na modalidade padrão, o risco de golpe é alto.</p>
+        <hr style="border: 0; border-top: 1px solid #fed7aa; margin: 20px 0;">
+        <p><strong>OLX Pay / Garantia:</strong> Ideal para eletrônicos e itens caros que podem ser enviados. Você paga uma pequena comissão, mas tem a segurança de que o dinheiro cairá na conta e a OLX media o envio.</p>
+    </div>
+
+    <section class="table-section">
+        <h2>Comparativo Direto</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Plataforma</th>
+                        <th>Quem Paga Frete?</th>
+                        <th>Envio / Etiqueta</th>
+                        <th>Contato</th>
+                        <th>Segurança</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>M. Livre Premium</strong></td>
+                        <td>Vendedor (em 79+)</td>
+                        <td>App gera automática</td>
+                        <td>Chat Interno</td>
+                        <td><span class="rank rank-high">5/5 - Alta</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shopee</strong></td>
+                        <td>Vendedor (Comissão)</td>
+                        <td>App gera automática</td>
+                        <td>Chat Interno</td>
+                        <td><span class="rank rank-high">4/5 - Boa</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>OLX Pay / Garantia</strong></td>
+                        <td>Comprador</td>
+                        <td>App gera automática</td>
+                        <td>Chat Interno</td>
+                        <td><span class="rank rank-high">4/5 - Boa</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Amazon</strong></td>
+                        <td>Vendedor</td>
+                        <td>Coleta ou Agência</td>
+                        <td>Chat Interno</td>
+                        <td><span class="rank rank-high">5/5 - Máxima</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Enjoei</strong></td>
+                        <td>Comprador</td>
+                        <td>App gera automática</td>
+                        <td>Comentários</td>
+                        <td><span class="rank rank-high">4/5 - Boa</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>OLX Padrão</strong></td>
+                        <td>Combinado</td>
+                        <td>Vendedor faz manual</td>
+                        <td>WhatsApp / Direto</td>
+                        <td><span class="rank rank-low">1/5 - Baixa</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 LucraJá - Simplificando a vida do vendedor brasileiro.</p>
+        <p>Acesse o LucraJá antes de cada venda e garanta seu lucro real.</p>
+    </footer>
+</div>
+
 </body>
 </html>
