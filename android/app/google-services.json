@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "331367705016",
+    "project_id": "lucraja-fb44a",
+    "storage_bucket": "lucraja-fb44a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331367705016:android:60960181df1df336b2074d",
+        "android_client_info": {
+          "package_name": "com.lucraja.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ6i7k7Hx1H6mfRH608OqgFQ7xcLSZpzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
