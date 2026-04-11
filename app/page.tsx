@@ -15,8 +15,11 @@ import { App as CapacitorApp } from "@capacitor/app";
 import { calcularTodos, CalcOptions, Resultado } from "@/lib/calc";
 import { toast } from "sonner";
 import { tsError, tsInfo } from "@/lib/troubleshoot";
+import Link from "next/link";
 
 export default function Page() {
+  const homeStorageKey = "lucraja-home-state";
+  const processedBaseKey = "lucraja-last-processed-base";
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const { balance, consumeCredit, syncBalance, updateCredits } = useCredits();
@@ -25,7 +28,9 @@ export default function Page() {
   const [credito10Package, setCredito10Package] = useState<any>(null);
   const [results, setResults] = useState<Resultado[] | null>(null);
   const [lastOpts, setLastOpts] = useState<CalcOptions | null>(null);
+  const [draftOpts, setDraftOpts] = useState<CalcOptions | null>(null);
   const [purchasing, setPurchasing] = useState(false);
+  const [homeRestored, setHomeRestored] = useState(false);
 
   useEffect(() => {
     // 1. Verificar sessão atual
@@ -41,6 +46,63 @@ export default function Page() {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(homeStorageKey);
+      if (!saved) return;
+      const parsed = JSON.parse(saved) as {
+        draftOpts?: CalcOptions | null;
+        lastOpts?: CalcOptions | null;
+        results?: Resultado[] | null;
+      };
+      setDraftOpts(parsed.draftOpts ?? parsed.lastOpts ?? null);
+      setLastOpts(parsed.lastOpts ?? null);
+      setResults(parsed.results ?? null);
+    } catch {}
+    finally {
+      setHomeRestored(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(
+        homeStorageKey,
+        JSON.stringify({
+          draftOpts,
+          lastOpts,
+          results,
+        })
+      );
+    } catch {}
+  }, [draftOpts, lastOpts, results]);
+
+  useEffect(() => {
+    if (!homeRestored || !draftOpts) return;
+    try {
+      const raw = window.localStorage.getItem(processedBaseKey);
+      if (!raw) return;
+      const processed = JSON.parse(raw) as {
+        precoVenda?: number;
+        custoPago?: number;
+      };
+      const matchesProcessed =
+        processed.precoVenda === draftOpts.precoVenda &&
+        processed.custoPago === draftOpts.custoPago;
+      if (!matchesProcessed) return;
+      const alreadySynced =
+        lastOpts?.precoVenda === draftOpts.precoVenda &&
+        lastOpts?.custoPago === draftOpts.custoPago &&
+        lastOpts?.incluiImpostoMEI === draftOpts.incluiImpostoMEI &&
+        lastOpts?.freteVendedor === draftOpts.freteVendedor &&
+        !!results?.length;
+      if (alreadySynced) return;
+      const syncedResults = calcularTodos(draftOpts);
+      setResults(syncedResults);
+      setLastOpts(draftOpts);
+    } catch {}
+  }, [draftOpts, homeRestored, lastOpts, processedBaseKey, results]);
 
   useEffect(() => {
     const init = async () => {
@@ -364,13 +426,45 @@ export default function Page() {
 
   const handleCalculate = async (opts: CalcOptions) => {
     try {
+      let isProcessed = false;
+      try {
+        const raw = window.localStorage.getItem(processedBaseKey);
+        if (raw) {
+          const processed = JSON.parse(raw) as {
+            precoVenda?: number;
+            custoPago?: number;
+          };
+          isProcessed =
+            processed.precoVenda === opts.precoVenda &&
+            processed.custoPago === opts.custoPago;
+        }
+      } catch {}
+
       const r = calcularTodos(opts);
       setResults(r);
       setLastOpts(opts);
+
+      if (isProcessed) {
+        return "cached" as const;
+      }
+
       const ok = await consumeCredit();
-      return ok;
+      if (ok) {
+        try {
+          window.localStorage.setItem(
+            processedBaseKey,
+            JSON.stringify({
+              precoVenda: opts.precoVenda,
+              custoPago: opts.custoPago,
+              updatedAt: new Date().toISOString(),
+            })
+          );
+        } catch {}
+        return "consumed" as const;
+      }
+      return "error" as const;
     } catch {
-      return false;
+      return "error" as const;
     }
   };
 
@@ -434,9 +528,23 @@ export default function Page() {
         <Button disabled={!Capacitor.isNativePlatform() || purchasing} onClick={handleBuyCredito10}>
           Comprar 10 créditos
         </Button>
+        <Button asChild variant="secondary">
+          <Link href="/ml2026">Novo ML 2026 🚀</Link>
+        </Button>
       </div>
 
-      <CalculatorForm balance={balance} onSubmit={handleCalculate} />
+      {homeRestored ? (
+        <CalculatorForm
+          balance={balance}
+          onSubmit={handleCalculate}
+          initialOptions={draftOpts}
+          onChange={setDraftOpts}
+        />
+      ) : (
+        <Card>
+          <CardContent className="p-4 text-sm text-gray-500">A carregar comparação...</CardContent>
+        </Card>
+      )}
       <ResultsCarousel results={results} opts={lastOpts} />
     </main>
   );

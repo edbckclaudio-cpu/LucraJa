@@ -18,30 +18,34 @@ export default function ResultsCarousel({ results, opts }: Props) {
 
   const composeMessage = () => {
     const lines: string[] = [];
-    lines.push(`*LucraJá – Resultado do cálculo*`);
+    const now = new Intl.DateTimeFormat("pt-BR", {
+      dateStyle: "short",
+      timeStyle: "short",
+    }).format(new Date());
+    lines.push(`*LucraJá* • ${now}`);
     if (opts) {
       lines.push("");
-      lines.push(`*Parâmetros*`);
+      lines.push(`*Valores Base*`);
       lines.push(`• Preço de venda: ${fmtBRL(opts.precoVenda)}`);
       lines.push(`• Custo pago: ${fmtBRL(opts.custoPago)}`);
       lines.push(`• Imposto MEI (6%): ${opts.incluiImpostoMEI ? "Sim" : "Não"}`);
       lines.push(`• Frete por conta do vendedor (+R$25): ${opts.freteVendedor ? "Sim" : "Não"}`);
     }
     lines.push("");
-    lines.push(`*Resultados por marketplace*`);
+    lines.push(`*Resultados da Home*`);
     const base = results.filter(
       (r) => r.marketplace.id !== "enjoei" && r.marketplace.id !== "olx_pay"
     );
     for (const r of base) {
+      const title =
+        r.marketplace.id === "ml_premium"
+          ? "ML Premium Antigo"
+          : r.marketplace.nome;
       lines.push("");
-      lines.push(`*${r.marketplace.nome}*`);
-      lines.push(`- Imposto MEI: ${fmtBRL(r.impostoMEI)}`);
-      lines.push(`- Comissão: ${fmtBRL(r.comissao)}`);
-      lines.push(`- Taxa fixa: ${fmtBRL(r.taxaFixa)}`);
-      lines.push(`- Taxas totais: ${fmtBRL(r.taxasTotais)}`);
+      lines.push(`📌 *${title}*`);
       lines.push(`- Você recebe: ${fmtBRL(r.voceRecebe)}`);
       lines.push(`- Lucro real: ${fmtBRL(r.lucroReal)}`);
-      lines.push(`- Margem sobre custo pago: ${p.format(r.margem)}%`);
+      lines.push(`- Margem: ${p.format(r.margem)}%`);
     }
     if (opts) {
       const enjoeiClassicoMsg = calcularParaMarketplace(
@@ -68,16 +72,83 @@ export default function ResultsCarousel({ results, opts }: Props) {
       ];
       for (const r of extras) {
         lines.push("");
-        lines.push(`*${r.marketplace.nome}*`);
-        lines.push(`- Imposto MEI: ${fmtBRL(r.impostoMEI)}`);
-        lines.push(`- Comissão: ${fmtBRL(r.comissao)}`);
-        lines.push(`- Taxa fixa: ${fmtBRL(r.taxaFixa)}`);
-        lines.push(`- Taxas totais: ${fmtBRL(r.taxasTotais)}`);
+        lines.push(`📌 *${r.marketplace.nome}*`);
         lines.push(`- Você recebe: ${fmtBRL(r.voceRecebe)}`);
         lines.push(`- Lucro real: ${fmtBRL(r.lucroReal)}`);
-        lines.push(`- Margem sobre custo pago: ${p.format(r.margem)}%`);
+        lines.push(`- Margem: ${p.format(r.margem)}%`);
       }
+      try {
+        const ml2026Raw = window.localStorage.getItem("lucraja-ml2026-state");
+        if (ml2026Raw) {
+          const parsed = JSON.parse(ml2026Raw) as {
+            results?: Array<{
+              titulo: string;
+              impostoMEI: number;
+              comissao: number;
+              taxaEnvio: number;
+              taxasTotais: number;
+              valorReceber: number;
+              lucroReal: number;
+              margem: number;
+            }> | null;
+          };
+          if (parsed.results?.length) {
+            lines.push("");
+            lines.push(`*Resultados ML 2026*`);
+            for (const item of parsed.results) {
+              const title = item.titulo === "ML Clássico" ? "ML 2026 (Clássico)" : "ML 2026 (Premium)";
+              const emoji = item.titulo === "ML Clássico" ? "🆕" : "🚀";
+              lines.push("");
+              lines.push(`${emoji} *${title}*`);
+              lines.push(`- Imposto MEI: ${fmtBRL(item.impostoMEI)}`);
+              lines.push(`- Comissão: ${fmtBRL(item.comissao)}`);
+              lines.push(`- Taxa fixa / frete: ${fmtBRL(item.taxaEnvio)}`);
+              lines.push(`- Taxas totais: ${fmtBRL(item.taxasTotais)}`);
+              lines.push(`- Valor a receber: ${fmtBRL(item.valorReceber)}`);
+              lines.push(`- Lucro real: ${fmtBRL(item.lucroReal)}`);
+              lines.push(`- Margem: ${p.format(item.margem)}%`);
+            }
+          }
+        }
+      } catch {}
+      lines.push("");
+      lines.push(`Gerado com LucraJá`);
+      return lines.join("\n");
     }
+    try {
+      const ml2026Raw = window.localStorage.getItem("lucraja-ml2026-state");
+      if (ml2026Raw) {
+        const parsed = JSON.parse(ml2026Raw) as {
+          results?: Array<{
+            titulo: string;
+            impostoMEI: number;
+            comissao: number;
+            taxaEnvio: number;
+            taxasTotais: number;
+            valorReceber: number;
+            lucroReal: number;
+            margem: number;
+          }> | null;
+        };
+        if (parsed.results?.length) {
+          lines.push("");
+          lines.push(`*Resultados ML 2026*`);
+          for (const item of parsed.results) {
+            const title = item.titulo === "ML Clássico" ? "ML 2026 (Clássico)" : "ML 2026 (Premium)";
+            const emoji = item.titulo === "ML Clássico" ? "🆕" : "🚀";
+            lines.push("");
+            lines.push(`${emoji} *${title}*`);
+            lines.push(`- Imposto MEI: ${fmtBRL(item.impostoMEI)}`);
+            lines.push(`- Comissão: ${fmtBRL(item.comissao)}`);
+            lines.push(`- Taxa fixa / frete: ${fmtBRL(item.taxaEnvio)}`);
+            lines.push(`- Taxas totais: ${fmtBRL(item.taxasTotais)}`);
+            lines.push(`- Valor a receber: ${fmtBRL(item.valorReceber)}`);
+            lines.push(`- Lucro real: ${fmtBRL(item.lucroReal)}`);
+            lines.push(`- Margem: ${p.format(item.margem)}%`);
+          }
+        }
+      }
+    } catch {}
     lines.push("");
     lines.push(`Gerado com LucraJá`);
     return lines.join("\n");
@@ -181,7 +252,11 @@ export default function ResultsCarousel({ results, opts }: Props) {
       {filtered.map((r) => (
         <Card key={r.marketplace.id}>
           <CardHeader>
-            <CardTitle>{r.marketplace.nome}</CardTitle>
+            <CardTitle>
+              {r.marketplace.id === "ml_premium"
+                ? "Mercado Livre (Valores antigos - Referência)"
+                : r.marketplace.nome}
+            </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-2 text-sm">
             <div>Imposto MEI: {fmtBRL(r.impostoMEI)}</div>

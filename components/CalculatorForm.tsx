@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,9 @@ import { CalcOptions } from "@/lib/calc";
 
 type Props = {
   balance: number;
-  onSubmit: (opts: CalcOptions) => Promise<boolean>;
+  onSubmit: (opts: CalcOptions) => Promise<"consumed" | "cached" | "error">;
+  initialOptions?: CalcOptions | null;
+  onChange?: (opts: CalcOptions) => void;
 };
 
 function useBRL(initial = "") {
@@ -32,11 +34,25 @@ function useBRL(initial = "") {
   return { val, setVal: onChange, number, setNumber, fmt };
 }
 
-export default function CalculatorForm({ balance, onSubmit }: Props) {
-  const preco = useBRL("R$\u00A00,00");
-  const custo = useBRL("R$\u00A00,00");
-  const [mei, setMei] = useState(false);
-  const [frete, setFrete] = useState(false);
+function formatBRL(n: number) {
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
+}
+
+export default function CalculatorForm({ balance, onSubmit, initialOptions, onChange }: Props) {
+  const preco = useBRL(initialOptions ? formatBRL(initialOptions.precoVenda) : "R$\u00A00,00");
+  const custo = useBRL(initialOptions ? formatBRL(initialOptions.custoPago) : "R$\u00A00,00");
+  const [mei, setMei] = useState(initialOptions?.incluiImpostoMEI ?? false);
+  const [frete, setFrete] = useState(initialOptions?.freteVendedor ?? false);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    onChange?.({
+      precoVenda: preco.number,
+      custoPago: custo.number,
+      incluiImpostoMEI: mei,
+      freteVendedor: frete,
+    });
+  }, [custo.number, frete, mei, onChange, preco.number]);
 
   return (
     <Card>
@@ -75,20 +91,24 @@ export default function CalculatorForm({ balance, onSubmit }: Props) {
           </div>
         </div>
         <Button
-          disabled={balance <= 0}
+          disabled={submitting}
           onClick={async () => {
-            if (balance <= 0) {
-              toast("Créditos esgotados. Adquira mais para continuar");
-              return;
+            if (submitting) return;
+            setSubmitting(true);
+            try {
+              const status = await onSubmit({
+                precoVenda: preco.number,
+                custoPago: custo.number,
+                incluiImpostoMEI: mei,
+                freteVendedor: frete,
+              });
+              if (status === "consumed") toast("Cálculo registrado e crédito consumido");
+              else if (status === "cached") toast("Valores já processados. Nenhum crédito será consumido");
+              else if (balance <= 0) toast("Créditos esgotados. Adquira mais para continuar");
+              else toast("Não foi possível calcular");
+            } finally {
+              setSubmitting(false);
             }
-            const ok = await onSubmit({
-              precoVenda: preco.number,
-              custoPago: custo.number,
-              incluiImpostoMEI: mei,
-              freteVendedor: frete,
-            });
-            if (ok) toast("Cálculo registrado e crédito consumido");
-            else toast("Não foi possível calcular");
           }}
         >
           Calcular Lucro
