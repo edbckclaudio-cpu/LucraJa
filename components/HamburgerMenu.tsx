@@ -8,7 +8,9 @@ import Link from "next/link";
 export default function HamburgerMenu() {
   const [open, setOpen] = useState(false);
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     setOpen(false);
     window.location.href = "/";
   };

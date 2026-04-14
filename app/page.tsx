@@ -33,14 +33,19 @@ export default function Page() {
   const [homeRestored, setHomeRestored] = useState(false);
 
   useEffect(() => {
+    const supabaseClient = supabase;
+    if (!supabaseClient) {
+      setLoading(false);
+      return;
+    }
     // 1. Verificar sessão atual
-    supabase.auth.getSession().then(({ data: { session } }: any) => {
+    supabaseClient.auth.getSession().then(({ data: { session } }: any) => {
       setSession(session);
       setLoading(false);
     });
 
     // 2. Ouvir mudanças na autenticação
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
+    const { data: { subscription } } = supabaseClient.auth.onAuthStateChange((_event: any, session: any) => {
       setSession(session);
     });
 
@@ -172,6 +177,8 @@ export default function Page() {
 
   // Captura deep link de retorno do Supabase (Android - Capacitor)
   useEffect(() => {
+    const supabaseClient = supabase;
+    if (!supabaseClient) return;
     const sub = CapacitorApp.addListener("appUrlOpen", async (data: any) => {
       const url = data?.url as string | undefined;
       if (url && url.startsWith("com.lucraja.app://login-callback")) {
@@ -189,7 +196,7 @@ export default function Page() {
           };
           const { access_token, refresh_token } = parseParams(url);
           if (access_token && refresh_token) {
-            const { data: res, error } = await supabase.auth.setSession({
+            const { data: res, error } = await supabaseClient.auth.setSession({
               access_token,
               refresh_token,
             } as any);
@@ -200,7 +207,7 @@ export default function Page() {
           }
           // Fallback 2: fluxo PKCE padrão
           try {
-            const { data: res, error } = await supabase.auth.exchangeCodeForSession(url);
+            const { data: res, error } = await supabaseClient.auth.exchangeCodeForSession(url);
             if (!error && res?.session) {
               setSession(res.session as any);
               return;
@@ -217,7 +224,12 @@ export default function Page() {
   }, []);
 
   const handleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
+    const supabaseClient = supabase;
+    if (!supabaseClient) {
+      toast.error("Supabase não configurado neste ambiente");
+      return;
+    }
+    await supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
         // Em ambiente nativo (Capacitor), usamos o esquema do app; no navegador/PC, usamos o origin.
@@ -229,12 +241,17 @@ export default function Page() {
   };
 
   const handleBuyCredito10 = async () => {
+    const supabaseClient = supabase;
+    if (!supabaseClient) {
+      toast.error("Supabase não configurado neste ambiente");
+      return;
+    }
     if (purchasing) return;
     setPurchasing(true);
     try {
       // Garante configuração mesmo se rcReady ainda não marcou true
       if (!rcReady) {
-        const emailNow = (await supabase.auth.getSession()).data.session?.user?.email as
+        const emailNow = (await supabaseClient.auth.getSession()).data.session?.user?.email as
           | string
           | undefined;
         const apiKeyNow = process.env.NEXT_PUBLIC_REVENUECAT_ANDROID_API_KEY;
@@ -253,7 +270,7 @@ export default function Page() {
         }
       }
       // Checagem extra do appUserID imediatamente antes da compra
-      const emailCheck = (await supabase.auth.getSession()).data.session?.user?.email ?? null;
+      const emailCheck = (await supabaseClient.auth.getSession()).data.session?.user?.email ?? null;
       tsInfo("revenuecat", "app_user_id_check", { email: emailCheck });
       try {
         await Purchases.syncPurchases();

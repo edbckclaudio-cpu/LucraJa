@@ -13,6 +13,7 @@ import { Copy, Pin } from "lucide-react";
 import { toast } from "sonner";
 
 export default function PerfilPage() {
+  const supabaseClient = supabase;
   const [session, setSession] = useState<any>(null);
   const { balance, syncBalance } = useCredits();
   const [ready, setReady] = useState(false);
@@ -20,10 +21,11 @@ export default function PerfilPage() {
   const [buying, setBuying] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then((res: any) => {
+    if (!supabaseClient) return;
+    supabaseClient.auth.getSession().then((res: any) => {
       setSession(res?.data?.session ?? null);
     });
-  }, []);
+  }, [supabaseClient]);
 
   useEffect(() => {
     const email = session?.user?.email as string | undefined;
@@ -86,6 +88,11 @@ export default function PerfilPage() {
   const buy = async () => {
     if (buying) return;
     setBuying(true);
+    if (!supabaseClient) {
+      toast.error("Supabase não configurado neste ambiente.");
+      setBuying(false);
+      return;
+    }
     if (!Capacitor.isNativePlatform()) {
       toast.error("Compras só estão disponíveis no app instalado.");
       setBuying(false);
@@ -93,7 +100,7 @@ export default function PerfilPage() {
     }
     try {
       // Garante configuração antes da compra
-      const emailNow = (await supabase.auth.getSession()).data.session?.user?.email as
+      const emailNow = (await supabaseClient.auth.getSession()).data.session?.user?.email as
         | string
         | undefined;
       const apiKeyNow = process.env.NEXT_PUBLIC_REVENUECAT_ANDROID_API_KEY;
@@ -201,7 +208,7 @@ export default function PerfilPage() {
               if (!email) return;
               tsInfo("revenuecat", "purchase_balance_before", { before: balance ?? 0, add: 10 });
               const next = (balance ?? 0) + 10;
-              await supabase
+              await (supabaseClient as any)
                 .from("user_credits")
                 .upsert({ email, credits: next }, { onConflict: "email" });
               tsInfo("revenuecat", "purchase_balance_after", { after: next });
@@ -218,7 +225,7 @@ export default function PerfilPage() {
         toast.error("Pacote de 10 créditos indisponível no momento");
         return;
       }
-      const emailCheck = (await supabase.auth.getSession()).data.session?.user?.email ?? null;
+      const emailCheck = (await supabaseClient.auth.getSession()).data.session?.user?.email ?? null;
       tsInfo("revenuecat", "app_user_id_check", { email: emailCheck });
       try {
         await Purchases.syncPurchases();
@@ -245,7 +252,7 @@ export default function PerfilPage() {
         if (!email) return;
         tsInfo("revenuecat", "purchase_balance_before", { before: balance ?? 0, add: 10 });
         const next = (balance ?? 0) + 10;
-        await supabase.from("user_credits").upsert({ email, credits: next }, { onConflict: "email" });
+        await (supabaseClient as any).from("user_credits").upsert({ email, credits: next }, { onConflict: "email" });
         tsInfo("revenuecat", "purchase_balance_after", { after: next });
         await syncBalance();
         toast.success("Sucesso! 10 créditos adicionados");
@@ -279,7 +286,8 @@ export default function PerfilPage() {
     const c = pinCount + 1;
     setPinCount(c);
     if (c >= 6) {
-      const sessionNow = await supabase.auth.getSession();
+      if (!supabaseClient) return;
+      const sessionNow = await supabaseClient.auth.getSession();
       const emailNow = sessionNow.data.session?.user?.email ?? null;
       // Constrói um sumário de antes/depois das compras + meta de produto (consumível)
       const raw = tsGet();
