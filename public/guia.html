@@ -15,6 +15,8 @@
             --success: #22c55e;
             --warning: #f59e0b;
             --dark: #0f172a;
+            --ml-yellow: #fff159;
+            --ml-blue: #3483fa;
         }
 
         body {
@@ -92,7 +94,6 @@
         }
 
         .google-play-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-
         .google-play-btn svg { width: 32px; height: 32px; margin-right: 15px; }
 
         .btn-text { display: flex; flex-direction: column; text-align: left; line-height: 1.2; }
@@ -128,15 +129,37 @@
         .tag-pf { background: #e0e7ff; color: #4338ca; }
         .tag-pj { background: #fef3c7; color: #92400e; }
 
-        .olx-box {
-            background: #fff7ed;
-            border: 2px solid #fdba74;
+        /* Estilo para os quadros estratégicos */
+        .strategy-box {
             padding: 35px;
             border-radius: 16px;
             margin-bottom: 40px;
+            border: 2px solid;
+        }
+        
+        .ml-box {
+            background: #fffef0;
+            border-color: #fff159;
+        }
+        .ml-box h2 { color: #665a00; margin-top: 0; display: flex; align-items: center; }
+        .ml-box h2::before { content: "🚀"; margin-right: 10px; }
+
+        .olx-box {
+            background: #fff7ed;
+            border-color: #fdba74;
         }
         .olx-box h2 { color: #9a3412; margin-top: 0; display: flex; align-items: center; }
         .olx-box h2::before { content: "⚠️"; margin-right: 10px; }
+
+        .badge-new {
+            background: var(--danger);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
 
         .table-section h2 { text-align: center; margin-bottom: 30px; color: var(--dark); }
         .table-container {
@@ -168,7 +191,7 @@
 <header>
     <div class="container">
         <h1>Guia do Vendedor Inteligente</h1>
-        <p class="subtitle">Descubra onde vender e pare de perder dinheiro com taxas escondidas.</p>
+        <p class="subtitle">Descubra onde vender e pare de perder dinheiro com taxas escondidas em 2026.</p>
     </div>
 </header>
 
@@ -177,20 +200,20 @@
     <section class="highlight-cta">
         <div class="cta-content">
             <h2>Não corra o risco de "Pagar para Trabalhar"</h2>
-            <p>Muitos vendedores iniciantes perdem dinheiro porque esquecem de calcular o frete real, a embalagem e até a <strong>gasolina</strong> até o ponto de envio. O LucraJá é seu escudo contra o prejuízo.</p>
+            <p>Em 2026, as taxas mudaram. Muitos perdem dinheiro porque esquecem de calcular o frete baseado em <strong>cubagem</strong> e as novas taxas variáveis por peso. O LucraJá é seu escudo.</p>
             
             <div class="cta-features">
                 <div class="feature-item">
                     <strong>🛑 Chega de Lucro Ilusório</strong>
-                    Saiba exatamente quanto sobra no seu bolso após TODAS as taxas da plataforma.
+                    Saiba exatamente quanto sobra após as novas comissões de até 19% do Mercado Livre.
                 </div>
                 <div class="feature-item">
-                    <strong>⛽ Proteja seu Deslocamento</strong>
-                    Não deixe que o custo do transporte para postar o pacote "coma" sua margem de lucro.
+                    <strong>📦 Cuidado com a Cubagem</strong>
+                    Produtos leves, mas grandes, agora pagam frete mais caro. Nós calculamos para você.
                 </div>
                 <div class="feature-item">
                     <strong>🚀 Decisão Profissional</strong>
-                    Compare na hora: vale mais a pena vender no Mercado Livre ou na OLX Pay?
+                    Vale a pena o ML Premium pelo parcelamento ou a Shopee pelos cupons de frete?
                 </div>
             </div>
 
@@ -206,98 +229,101 @@
         </div>
     </section>
 
-    <div class="grid">
-        <div class="card" style="border-top-color: #2563eb;">
-            <span class="tag tag-pf">PF</span> <span class="tag tag-pj">PJ</span>
-            <h2>Mercado Livre Premium</h2>
-            <p><strong>Vantagem:</strong> Venda relâmpago. O produto aparece para todo o Brasil e oferece parcelamento sem juros.</p>
-            <p><strong>Logística:</strong> Etiqueta pronta. Você posta em agências autorizadas ou pontos de coleta perto de você.</p>
-        </div>
+    <div class="strategy-box ml-box">
+        <h2>Mercado Livre: Logística Imbatível (Regras 2026) <span class="badge-new">ATUALIZADO</span></h2>
+        <p>Mesmo com as taxas mais altas, o ML domina pela confiança. Em 2026, o diferencial é o <strong>rastreio em tempo real via WhatsApp</strong> e notificações de "Entregador na sua porta".</p>
+        
+        <p><strong>ML Clássico:</strong> Exposição alta. Ideal para quem tem o menor preço, mas o comprador paga juros se parcelar.</p>
+        <p><strong>ML Premium:</strong> Exposição máxima. Oferece <strong>12x Sem Juros</strong> — o maior gatilho de venda para produtos acima de R$ 200.</p>
+        
+        <hr style="border: 0; border-top: 1px solid #eab308; margin: 20px 0;">
+        <p><strong>A Regra dos R$ 79:</strong> Abaixo desse valor, você paga uma <strong>Taxa Operacional</strong> que varia conforme o peso do item. Acima de R$ 79, o <strong>Frete Grátis é Obrigatório</strong> e descontado do seu saldo automaticamente.</p>
+    </div>
 
+    <div class="grid">
         <div class="card" style="border-top-color: #ee4d2d;">
             <span class="tag tag-pf">PF</span> <span class="tag tag-pj">PJ</span>
             <h2>Shopee</h2>
-            <p><strong>Vantagem:</strong> Popularidade imensa. Cupons de frete grátis atraem muitos compradores para itens baratos.</p>
-            <p><strong>Logística:</strong> Simples. Gera etiqueta para postagem nos Correios ou agências parceiras (Pegaki).</p>
+            <p><strong>Vantagem:</strong> Popularidade imensa com o público jovem. Os cupons de "Frete Grátis" da plataforma são o maior atrativo.</p>
+            <p><strong>Logística:</strong> Taxa fixa de R$ 4,00 por item + comissão. Etiqueta para Correios ou Pontos Pegaki.</p>
         </div>
 
         <div class="card" style="border-top-color: #ff9900;">
             <span class="tag tag-pj">PJ</span>
-            <h2>Amazon</h2>
-            <p><strong>Vantagem:</strong> Credibilidade total. O público da Amazon costuma reclamar menos e comprar itens de maior valor.</p>
-            <p><strong>Logística:</strong> A Amazon pode coletar na sua porta (DBA) ou você envia para o centro deles (FBA).</p>
+            <h2>Amazon (FBA/DBA)</h2>
+            <p><strong>Vantagem:</strong> Público qualificado que valoriza a entrega "Prime". A Amazon costuma proteger muito o vendedor contra fraudes.</p>
+            <p><strong>Logística:</strong> Eles podem coletar na sua porta. O cálculo de frete é rígido, use o LucraJá para não errar.</p>
         </div>
 
         <div class="card" style="border-top-color: #f87171;">
             <span class="tag tag-pf">PF</span>
-            <h2>Enjoei (Turbinado)</h2>
-            <p><strong>Vantagem:</strong> O paraíso do desapego. Ótimo para roupas, acessórios e marcas de luxo usadas.</p>
-            <p><strong>Logística:</strong> Vendedor imprime a etiqueta e leva aos Correios. Taxas mais altas, mas o público aceita pagar o valor pedido.</p>
+            <h2>Enjoei</h2>
+            <p><strong>Vantagem:</strong> Público de nicho (moda/luxo). Aceitam pagar mais caro se a foto e a descrição forem boas.</p>
+            <p><strong>Atenção:</strong> Taxas altíssimas que podem chegar a 30% do valor total com as "participações em frete".</p>
         </div>
     </div>
 
-    <div class="olx-box">
+    <div class="strategy-box olx-box">
         <h2>OLX: A Escolha Estratégica</h2>
-        <p><strong>OLX Padrão (Taxa Zero):</strong> Use exclusivamente para <strong>produtos grandes e pesados</strong> (fogão, cama, sofá, geladeira). Como o frete desses itens seria absurdo, você combina para o comprador retirar na sua casa e pagar no ato (Pix ou dinheiro). 
-        <br><em>Cuidado:</em> Nunca envie pelos correios na modalidade padrão, o risco de golpe é alto.</p>
+        <p><strong>OLX Padrão (Taxa Zero):</strong> Use exclusivamente para <strong>produtos gigantes</strong> (móveis, geladeiras). O comprador retira e paga no local. <em>Risco:</em> Sem garantia da plataforma.</p>
         <hr style="border: 0; border-top: 1px solid #fed7aa; margin: 20px 0;">
-        <p><strong>OLX Pay / Garantia:</strong> Ideal para eletrônicos e itens caros que podem ser enviados. Você paga uma pequena comissão, mas tem a segurança de que o dinheiro cairá na conta e a OLX media o envio.</p>
+        <p><strong>OLX Pay:</strong> Segurança total. A OLX segura o dinheiro até o comprador receber. Ótimo para enviar eletrônicos pequenos por correio.</p>
     </div>
 
     <section class="table-section">
-        <h2>Comparativo Direto</h2>
+        <h2>Comparativo Direto 2026</h2>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th>Plataforma</th>
-                        <th>Quem Paga Frete?</th>
-                        <th>Envio / Etiqueta</th>
-                        <th>Contato</th>
-                        <th>Segurança</th>
+                        <th>Comissão Base</th>
+                        <th>Frete/Taxas</th>
+                        <th>Diferencial 2026</th>
+                        <th>Confiança</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td><strong>M. Livre Premium</strong></td>
-                        <td>Vendedor (em 79+)</td>
-                        <td>App gera automática</td>
-                        <td>Chat Interno</td>
+                        <td>17% a 19%</td>
+                        <td>Grátis (em 79+)</td>
+                        <td>12x Sem Juros + WhatsApp</td>
+                        <td><span class="rank rank-high">5/5 - Máxima</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>M. Livre Clássico</strong></td>
+                        <td>12% a 14%</td>
+                        <td>Grátis (em 79+)</td>
+                        <td>Entrega no mesmo dia</td>
                         <td><span class="rank rank-high">5/5 - Alta</span></td>
                     </tr>
                     <tr>
                         <td><strong>Shopee</strong></td>
-                        <td>Vendedor (Comissão)</td>
-                        <td>App gera automática</td>
-                        <td>Chat Interno</td>
-                        <td><span class="rank rank-high">4/5 - Boa</span></td>
-                    </tr>
-                    <tr>
-                        <td><strong>OLX Pay / Garantia</strong></td>
-                        <td>Comprador</td>
-                        <td>App gera automática</td>
-                        <td>Chat Interno</td>
+                        <td>14% a 20%</td>
+                        <td>R$ 4 + Comissão</td>
+                        <td>Volume massivo de vendas</td>
                         <td><span class="rank rank-high">4/5 - Boa</span></td>
                     </tr>
                     <tr>
                         <td><strong>Amazon</strong></td>
-                        <td>Vendedor</td>
-                        <td>Coleta ou Agência</td>
-                        <td>Chat Interno</td>
-                        <td><span class="rank rank-high">5/5 - Máxima</span></td>
+                        <td>15%</td>
+                        <td>Tabela Logística</td>
+                        <td>Selos Prime de entrega</td>
+                        <td><span class="rank rank-high">5/5 - Alta</span></td>
                     </tr>
                     <tr>
-                        <td><strong>Enjoei</strong></td>
-                        <td>Comprador</td>
-                        <td>App gera automática</td>
-                        <td>Comentários</td>
+                        <td><strong>OLX Pay</strong></td>
+                        <td>10% a 12%</td>
+                        <td>Comprador paga</td>
+                        <td>Ótimo para usados caros</td>
                         <td><span class="rank rank-high">4/5 - Boa</span></td>
                     </tr>
                     <tr>
                         <td><strong>OLX Padrão</strong></td>
-                        <td>Combinado</td>
-                        <td>Vendedor faz manual</td>
-                        <td>WhatsApp / Direto</td>
+                        <td>0%</td>
+                        <td>N/A (Retirada)</td>
+                        <td>Lucro total (Sem garantia)</td>
                         <td><span class="rank rank-low">1/5 - Baixa</span></td>
                     </tr>
                 </tbody>
