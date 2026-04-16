@@ -46,17 +46,18 @@
         .subtitle { color: #64748b; font-size: 1.2rem; margin-top: 10px; }
 
         .highlight-cta {
-            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%);
             color: white;
             padding: 40px;
-            border-radius: 20px;
+            border-radius: 24px;
             margin-bottom: 40px;
-            box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(30, 64, 175, 0.3);
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .cta-content h2 { color: #fde047; font-size: 2rem; margin-top: 0; }
-        .cta-content p { font-size: 1.1rem; max-width: 800px; margin: 0 auto 25px; }
+        .cta-content h2 { color: #fde047; font-size: 2.2rem; margin-top: 0; line-height: 1.2; }
+        .cta-content p { font-size: 1.1rem; max-width: 800px; margin: 0 auto 25px; opacity: 0.9; }
 
         .cta-features {
             display: grid;
@@ -67,18 +68,38 @@
         }
 
         .feature-item {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             padding: 20px;
-            border-radius: 12px;
-            backdrop-filter: blur(5px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .feature-item strong { display: block; margin-bottom: 5px; color: #fde047; }
+        .feature-item strong { display: block; margin-bottom: 5px; color: #fde047; font-size: 1.1rem; }
+
+        /* Nova seção de Conversão do App */
+        .app-download-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 20px;
+            border: 1px dashed rgba(252, 224, 71, 0.5);
+        }
+
+        .app-download-box h3 {
+            color: #fde047;
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+        }
+
+        .app-download-box p {
+            font-size: 1rem !important;
+            margin-bottom: 20px !important;
+        }
 
         .store-badge-container {
             display: flex;
             justify-content: center;
-            margin-top: 30px;
+            align-items: center;
         }
 
         .google-play-btn {
@@ -86,19 +107,24 @@
             align-items: center;
             background-color: #000;
             color: white;
-            padding: 12px 28px;
-            border-radius: 10px;
+            padding: 14px 32px;
+            border-radius: 12px;
             text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.15);
         }
 
-        .google-play-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .google-play-btn:hover { 
+            transform: scale(1.05); 
+            border-color: #fde047;
+            box-shadow: 0 0 20px rgba(253, 224, 71, 0.2);
+        }
+
         .google-play-btn svg { width: 32px; height: 32px; margin-right: 15px; }
 
         .btn-text { display: flex; flex-direction: column; text-align: left; line-height: 1.2; }
-        .btn-text span { font-size: 10px; font-weight: 400; }
-        .btn-text strong { font-size: 18px; font-weight: 600; }
+        .btn-text span { font-size: 11px; font-weight: 400; color: #94a3b8; }
+        .btn-text strong { font-size: 19px; font-weight: 600; }
 
         .grid {
             display: grid;
@@ -129,7 +155,6 @@
         .tag-pf { background: #e0e7ff; color: #4338ca; }
         .tag-pj { background: #fef3c7; color: #92400e; }
 
-        /* Estilo para os quadros estratégicos */
         .strategy-box {
             padding: 35px;
             border-radius: 16px;
@@ -137,17 +162,11 @@
             border: 2px solid;
         }
         
-        .ml-box {
-            background: #fffef0;
-            border-color: #fff159;
-        }
+        .ml-box { background: #fffef0; border-color: #fff159; }
         .ml-box h2 { color: #665a00; margin-top: 0; display: flex; align-items: center; }
         .ml-box h2::before { content: "🚀"; margin-right: 10px; }
 
-        .olx-box {
-            background: #fff7ed;
-            border-color: #fdba74;
-        }
+        .olx-box { background: #fff7ed; border-color: #fdba74; }
         .olx-box h2 { color: #9a3412; margin-top: 0; display: flex; align-items: center; }
         .olx-box h2::before { content: "⚠️"; margin-right: 10px; }
 
@@ -183,6 +202,7 @@
         @media (max-width: 600px) {
             h1 { font-size: 2rem; }
             .highlight-cta { padding: 25px; }
+            .cta-content h2 { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -199,75 +219,80 @@
 
     <section class="highlight-cta">
         <div class="cta-content">
-            <h2>Não corra o risco de "Pagar para Trabalhar"</h2>
-            <p>Em 2026, as taxas mudaram. Muitos perdem dinheiro porque esquecem de calcular o frete baseado em <strong>cubagem</strong> e as novas taxas variáveis por peso. O LucraJá é seu escudo.</p>
+            <h2>Você está realmente lucrando ou apenas "trocando dinheiro"?</h2>
+            <p>Vender em marketplaces sem calcular a <strong>cubagem</strong> e as novas taxas de 2026 é o caminho mais rápido para o prejuízo. O LucraJá é a ferramenta definitiva para proteger sua margem.</p>
             
             <div class="cta-features">
                 <div class="feature-item">
-                    <strong>🛑 Chega de Lucro Ilusório</strong>
-                    Saiba exatamente quanto sobra após as novas comissões de até 19% do Mercado Livre.
+                    <strong>🛑 Pare de Perder Dinheiro</strong>
+                    Muitos vendedores esquecem que produtos volumosos pagam frete maior. Nós calculamos isso no ato.
                 </div>
                 <div class="feature-item">
-                    <strong>📦 Cuidado com a Cubagem</strong>
-                    Produtos leves, mas grandes, agora pagam frete mais caro. Nós calculamos para você.
+                    <strong>📊 Comparação em Tempo Real</strong>
+                    Vale mais a pena vender no ML Premium ou na Shopee? Compare o lucro líquido em segundos.
                 </div>
                 <div class="feature-item">
-                    <strong>🚀 Decisão Profissional</strong>
-                    Vale a pena o ML Premium pelo parcelamento ou a Shopee pelos cupons de frete?
+                    <strong>⛽ Custo Oculto Zero</strong>
+                    Considere embalagem, imposto MEI e até o deslocamento para postagem.
                 </div>
             </div>
 
-            <div class="store-badge-container">
-                <a href="https://play.google.com/store/apps/details?id=com.lucraja.app" target="_blank" class="google-play-btn">
-                    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M325.3 234.3L104.6 13l280.8 161.2-5.5 5.5-54.6 54.6zM47 32.8c-.6 2.1-.9 4.3-.9 6.6v432.1c0 2.3.3 4.5.9 6.6l221.7-221.7L47 32.8zm357.4 154.2L414.3 194c25.2 14.4 42.1 41.3 42.1 72 0 30.7-16.9 57.6-42.1 72l-9.7 5.5-54.6-54.6 54.7-54.9zM104.6 499l220.7-221.3 54.6 54.6L104.6 499z" fill="#fff"/></svg>
-                    <div class="btn-text">
-                        <span>DISPONÍVEL NO</span>
-                        <strong>Google Play</strong>
-                    </div>
-                </a>
+            <div class="app-download-box">
+                <h3>🚀 Leve a Calculadora no seu Bolso</h3>
+                <p>Baixe agora o app oficial e <strong>ganhe 2 consultas grátis</strong> para testar seus produtos e garantir que cada venda coloque dinheiro de verdade na sua conta.</p>
+                
+                <div class="store-badge-container">
+                    <a href="https://play.google.com/store/apps/details?id=com.lucraja.app" target="_blank" class="google-play-btn">
+                        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M325.3 234.3L104.6 13l280.8 161.2-5.5 5.5-54.6 54.6zM47 32.8c-.6 2.1-.9 4.3-.9 6.6v432.1c0 2.3.3 4.5.9 6.6l221.7-221.7L47 32.8zm357.4 154.2L414.3 194c25.2 14.4 42.1 41.3 42.1 72 0 30.7-16.9 57.6-42.1 72l-9.7 5.5-54.6-54.6 54.7-54.9zM104.6 499l220.7-221.3 54.6 54.6L104.6 499z" fill="#fff"/></svg>
+                        <div class="btn-text">
+                            <span>BAIXAR GRÁTIS NO</span>
+                            <strong>Google Play</strong>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
     <div class="strategy-box ml-box">
         <h2>Mercado Livre: Logística Imbatível (Regras 2026) <span class="badge-new">ATUALIZADO</span></h2>
-        <p>Mesmo com as taxas mais altas, o ML domina pela confiança. Em 2026, o diferencial é o <strong>rastreio em tempo real via WhatsApp</strong> e notificações de "Entregador na sua porta".</p>
+        <p>O ML domina pela confiança. Em 2026, o diferencial é o <strong>rastreio via WhatsApp</strong> e notificações de "Entregador na sua porta".</p>
         
         <p><strong>ML Clássico:</strong> Exposição alta. Ideal para quem tem o menor preço, mas o comprador paga juros se parcelar.</p>
         <p><strong>ML Premium:</strong> Exposição máxima. Oferece <strong>12x Sem Juros</strong> — o maior gatilho de venda para produtos acima de R$ 200.</p>
         
         <hr style="border: 0; border-top: 1px solid #eab308; margin: 20px 0;">
-        <p><strong>A Regra dos R$ 79:</strong> Abaixo desse valor, você paga uma <strong>Taxa Operacional</strong> que varia conforme o peso do item. Acima de R$ 79, o <strong>Frete Grátis é Obrigatório</strong> e descontado do seu saldo automaticamente.</p>
+        <p><strong>A Regra dos R$ 79:</strong> Abaixo desse valor, você paga uma Taxa Operacional Variável. Acima de R$ 79, o Frete Grátis é obrigatório.</p>
     </div>
 
     <div class="grid">
         <div class="card" style="border-top-color: #ee4d2d;">
             <span class="tag tag-pf">PF</span> <span class="tag tag-pj">PJ</span>
             <h2>Shopee</h2>
-            <p><strong>Vantagem:</strong> Popularidade imensa com o público jovem. Os cupons de "Frete Grátis" da plataforma são o maior atrativo.</p>
+            <p><strong>Vantagem:</strong> Popularidade imensa. Os cupons de "Frete Grátis" são o maior atrativo para o comprador.</p>
             <p><strong>Logística:</strong> Taxa fixa de R$ 4,00 por item + comissão. Etiqueta para Correios ou Pontos Pegaki.</p>
         </div>
 
         <div class="card" style="border-top-color: #ff9900;">
             <span class="tag tag-pj">PJ</span>
             <h2>Amazon (FBA/DBA)</h2>
-            <p><strong>Vantagem:</strong> Público qualificado que valoriza a entrega "Prime". A Amazon costuma proteger muito o vendedor contra fraudes.</p>
-            <p><strong>Logística:</strong> Eles podem coletar na sua porta. O cálculo de frete é rígido, use o LucraJá para não errar.</p>
+            <p><strong>Vantagem:</strong> Público qualificado "Prime". A Amazon costuma proteger muito o vendedor contra fraudes.</p>
+            <p><strong>Logística:</strong> Coleta na porta ou agência. O cálculo de frete é rígido, não erre no peso.</p>
         </div>
 
         <div class="card" style="border-top-color: #f87171;">
             <span class="tag tag-pf">PF</span>
             <h2>Enjoei</h2>
-            <p><strong>Vantagem:</strong> Público de nicho (moda/luxo). Aceitam pagar mais caro se a foto e a descrição forem boas.</p>
-            <p><strong>Atenção:</strong> Taxas altíssimas que podem chegar a 30% do valor total com as "participações em frete".</p>
+            <p><strong>Vantagem:</strong> Público de nicho (moda/luxo). Aceitam pagar mais caro por itens bem fotografados.</p>
+            <p><strong>Atenção:</strong> Taxas podem chegar a 30% do valor total. Calcule sempre antes de anunciar.</p>
         </div>
     </div>
 
     <div class="strategy-box olx-box">
         <h2>OLX: A Escolha Estratégica</h2>
-        <p><strong>OLX Padrão (Taxa Zero):</strong> Use exclusivamente para <strong>produtos gigantes</strong> (móveis, geladeiras). O comprador retira e paga no local. <em>Risco:</em> Sem garantia da plataforma.</p>
+        <p><strong>OLX Padrão:</strong> Use para <strong>móveis e eletrodomésticos</strong>. O comprador retira e paga no local (Taxa Zero).</p>
         <hr style="border: 0; border-top: 1px solid #fed7aa; margin: 20px 0;">
-        <p><strong>OLX Pay:</strong> Segurança total. A OLX segura o dinheiro até o comprador receber. Ótimo para enviar eletrônicos pequenos por correio.</p>
+        <p><strong>OLX Pay:</strong> Segurança total para envios por Correios. A plataforma garante o pagamento após a entrega.</p>
     </div>
 
     <section class="table-section">
